@@ -70,13 +70,21 @@ button:hover {
 
 <body class="g-sidenav-show bg-gray-100">
 <?php
- include_once 'dbConfig.php';
-$username = isset($_GET['username']) ? htmlspecialchars($_GET['username']) : '';
-$umobilenumber = isset($_GET['mobilenumber']) ? htmlspecialchars($_GET['mobilenumber']) : '';
+include_once 'config.php';
+// Retrieve user information from cookies
+
+// Retrieve transaction details from the GET parameters
+$shopname = isset($_GET['shopname']) ? htmlspecialchars($_GET['shopname']) : '';
+$smobilenumber = isset($_GET['smobilenumber']) ? htmlspecialchars($_GET['smobilenumber']) : '';
+$credit = isset($_GET['credit']) ? floatval($_GET['credit']) : 0;
+$debit = isset($_GET['debit']) ? floatval($_GET['debit']) : 0;
+$balance = isset($_GET['balance']) ? floatval($_GET['balance']) : 0;
+$itemscount = isset($_GET['itemscount']) ? intval($_GET['itemscount']) : 0;
+$notes = isset($_GET['notes']) ? htmlspecialchars($_GET['notes']) : '';
 
 
-$shopname = isset($_COOKIE['username']) ? $_COOKIE['username'] : '';
-$smobilenumber = isset($_COOKIE['mobilenumber']) ? $_COOKIE['mobilenumber'] : '';
+$username = isset($_COOKIE['username']) ? $_COOKIE['username'] : '';
+$umobilenumber = isset($_COOKIE['umobilenumber']) ? $_COOKIE['umobilenumber'] : '';
 
 // Calculate total balance for the user in the specific shop
 $sql = "SELECT SUM(balance) AS totalBalance,SUM(credit) AS totalcredit, SUM(totalamount) AS tamount
@@ -97,7 +105,7 @@ if ($result->num_rows > 0) {
 $conn->close();
 
 // Creating the form with sanitized values
-echo '<form action="edit2.php?username='.urlencode($username).'&mobilenumber='.urlencode($umobilenumber).'" method="post" onsubmit="return validateForm()">';
+echo '<form action="edit2.php?shopname='.urlencode($shopname).'&smobilenumber='.urlencode($smobilenumber).'&credit='.urlencode($tamount).'&debit='.urlencode($totalcredit).'&balance='.urlencode($totalBalance).'&itemscount='.urlencode($itemscount).'" method="post" onsubmit="return validateForm()">';
 ?>
   <div class="position-absolute w-100 min-height-300 top-0" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg'); background-position-y: 50%;">
            
@@ -124,10 +132,10 @@ echo '<form action="edit2.php?username='.urlencode($username).'&mobilenumber='.u
          echo' <div class="col-auto my-auto">';
             echo'<div class="h-100">';
              echo' <h5 class="mb-1">
-               '.$username.'
+               '.$shopname.'
               </h5>';
               echo'<p class="mb-0 font-weight-bold text-sm">
-             '. $umobilenumber.'
+             '. $smobilenumber.'
               </p>';
             echo'</div>';
           echo'</div>';
@@ -158,13 +166,13 @@ echo '<form action="edit2.php?username='.urlencode($username).'&mobilenumber='.u
                 <div class="col-md-6">
                   <!--<div class="form-group">-->
                     
-                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
+                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($shopname); ?>">
  <!-- </div>-->
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     
-                    <input type="hidden" name="mobilenumber" value="<?php echo htmlspecialchars($umobilenumber); ?>">
+                    <input type="hidden" name="mobilenumber" value="<?php echo htmlspecialchars($smobilenumber); ?>">
   </div>
                 </div>
                 <div class="col-md-6">
@@ -179,7 +187,7 @@ echo '<form action="edit2.php?username='.urlencode($username).'&mobilenumber='.u
         <select class="form-control" id="rdateOption" name="rdateOption">
           <option value="weekly">Weekly</option>
           <option value="monthly">Monthly</option>
-         
+          <option value="on_day">On Day</option>
         </select>
       </div>
     </div>

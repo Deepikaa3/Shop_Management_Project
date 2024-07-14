@@ -35,19 +35,8 @@
     
   </aside>
   <main class="main-content position-relative border-radius-lg ">
-    <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
-      <div class="container-fluid py-1 px-3">
-        <nav aria-label="breadcrumb">
-         
-            <div class="container-fluid py-4 d-flex justify-content-center align-items-center">
-                <div class="row">
-                  <div class="col-lg-8">
-                  
-                  </div>
-                </div>
-              </div>
-        </nav>
+  <i class="fa fa-arrow-left fa-1x text-white px-3 pt-2" onclick="goBack()"></i>
+   
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
            
@@ -109,7 +98,7 @@
       <div class="row">
         <div class="col-lg-8">
           <div class="row">
-            <div class="col-xl-6 mb-xl-0 mb-4">
+            <div class="col-xl-6 mb-xl-0 mb-2 mt-2">
             <h6 class="font-weight-bolder text-white mb-0 text-lg text-center">Tracker</h6>
               </div>
             </div>
@@ -146,8 +135,9 @@
               <h6 class="mb-0" text-center>Purchase Information</h6>
             </div>
             <?php
- include_once 'dbConfig.php';
-$username = $_GET['shopname'];
+// Assuming you have a database connection established
+include_once 'config.php';
+$username = $_GET['username'];
 $mobilenumber = $_GET['mobilenumber'];
 $purchasedate = $_GET['date'];
 $itemscount = $_GET['itemscount'];
@@ -166,15 +156,15 @@ $result = $conn->query($sql);
                    echo' <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">';
                       echo'<div class="d-flex flex-column">';
                        
-                        echo "<h6 class='mb-3 text-center text-lg'>&nbsp;&nbsp;Shop Name&nbsp;" .$row['shopname']. "</h6>";
-            echo "<h6 class='mb-2 text-sm'>Shop Mobilenumber: <span class='text-dark font-weight-bold ms-sm-2'>" .$row['smobilenumber']. "</span></h6>";
-            echo "<h6 class='mb-2 text-sm'>Total Amount: <span class='text-dark ms-sm-2 font-weight-bold'>" .$credit. "</span></h6>";
-            echo "<h6 class='mb-2 text-sm'>Debit Amount: <span class='text-dark ms-sm-2 font-weight-bold'>" .$debit. "</span></h6>";
+                        echo "<h6 class='mb-3 text-center text-lg'>&nbsp;&nbsp;&nbsp;" .$row['shopname']. "</h6>";
+            //echo "<h6 class='mb-2 text-sm'>Shop Mobilenumber: <span class='text-dark font-weight-bold ms-sm-2'>" .$row['smobilenumber']. "</span></h6>";
+            echo "<h6 class='mb-2 text-sm'>Bill Amount: <span class='text-dark ms-sm-2 font-weight-bold'>" .$credit. "</span></h6>";
+            echo "<h6 class='mb-2 text-sm'>Payment Amount: <span class='text-dark ms-sm-2 font-weight-bold'>" .$debit. "</span></h6>";
             echo "<h6 class='mb-2 text-sm'>Balance Amount: <span class='text-dark ms-sm-2 font-weight-bold'>" .$balance. "</span></h6>";
             echo "<h6 class='mb-2 text-sm'>Items Count: <span class='text-dark ms-sm-2 font-weight-bold'>" .$itemscount. "</span></h6>";
             echo "<h6 class='mb-2 text-sm'>Purchase Date: <span class='text-dark ms-sm-2 font-weight-bold'>" .$purchasedate. "</span></h6>";
-            echo "<h6 class='mb-2 text-sm'>Credit Date: <span class='text-dark ms-sm-2 font-weight-bold'>" .$row['creditdate']. "</span></h6>";
-         
+            echo "<h6 class='mb-2 text-sm'>Remainder Date: <span class='text-dark ms-sm-2 font-weight-bold'>" .$row['rdate']. "</span></h6>";
+           
             if (!empty($row['notes'])) {
               echo "<h6 class='text-xs'>Notes: <span class='text-dark ms-sm-2 font-weight-bold'>" . $row['notes'] . "</span></h6>";
           }
@@ -227,6 +217,9 @@ $conn->close();
         damping: '0.5'
       }
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+    function goBack() {
+        window.history.back();
     }
   </script>
   <!-- Github buttons -->

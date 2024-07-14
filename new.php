@@ -48,31 +48,31 @@
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
-    <div class="d-flex align-items-center justify-content-between">
-      <a href="#" class="logo d-flex align-items-center">
-        <img src="logo.png" alt="">
-        <span class="d-none d-lg-block">Credit Connect</span>
+<div class="d-flex align-items-center justify-content-between">
+  <a href="#" class="logo d-flex align-items-center">
+    <img src="logo.png" alt="">
+    <span class="d-none d-lg-block">Credit Connect</span>
+  </a>
+  <i class="bi bi-list toggle-sidebar-btn"></i>
+</div><!-- End Logo -->
+
+
+
+<nav class="header-nav ms-auto">
+  <ul class="d-flex align-items-center">
+
+    <li class="nav-item d-block d-lg-none">
+      <a class="nav-link nav-icon search-bar-toggle " href="#">
+       
       </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
-
-    
-
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
-
-        <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-           
-          </a>
         </li><!-- End Search Icon-->
         <?php
 // Establish database connection (replace with your credentials)
-include_once 'dbconfig.php';
+include_once 'config.php';
 
-$shopname=$_COOKIE['username'];
-$smobilenumber=$_COOKIE['mobilenumber'];
-$sql3="SELECT count from ownersignup WHERE mobile_number='$smobilenumber'";
+$username=$_COOKIE['username'];
+$umobilenumber=$_COOKIE['umobilenumber'];
+$sql3="SELECT count from usersignup WHERE mobilenumber='$umobilenumber'";
 $result3 = $conn->query($sql3);
 
 if ($result3->num_rows > 0) {
@@ -93,18 +93,18 @@ $currentDate = date("Y-m-d");
 
 
 // Query to fetch payments due tomorrow for the specific user
-$sql = "SELECT SUM(balance) AS total_balance, umobilenumber, username,rdate
+$sql = "SELECT SUM(balance) AS total_balance, smobilenumber, shopname,rdate
         FROM owneraccounts 
-        WHERE smobilenumber = '$smobilenumber'
+        WHERE umobilenumber = '$umobilenumber'
         AND (rdate = CURDATE() OR rdate = DATE_ADD(CURDATE(), INTERVAL 1 DAY) OR rdate = DATE_ADD(CURDATE(), INTERVAL 1 WEEK))
-        GROUP BY umobilenumber, username";
+        GROUP BY smobilenumber, shopname";
 $result = $conn->query($sql);
 $count = 0;
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $amountDue = $row['total_balance'];
-        $username = $row['username'];
-        $umobilenumber = $row['umobilenumber'];
+        $shopname = $row['shopname'];
+        $smobilenumber = $row['smobilenumber'];
         $rdate = $row['rdate'];
 
         // Calculate the time difference in days
@@ -130,11 +130,11 @@ if ($result->num_rows > 0) {
       }
          
 // Establish database connection (replace with your credentials)
-include_once 'dbconfig.php';
+include_once 'config.php';
 
-$shopname = $_COOKIE['username'];
-$smobilenumber = $_COOKIE['mobilenumber'];
-$sql = "SELECT imgid,imgname,images FROM usersignup WHERE mobilenumber = '$umobilenumber'";
+$username = $_COOKIE['username'];
+$umobilenumber = $_COOKIE['umobilenumber'];
+$sql = "SELECT imgid,imgname,images FROM ownersignup WHERE mobile_number = '$smobilenumber'";
 $result = $conn->query($sql);
 
 if ($result === false) {
@@ -177,7 +177,7 @@ if ($result->num_rows > 0) {
     echo '<p class="text-center align-items-center">' . $notificationMessage . '</p>';
 
   }
-  $sql4="UPDATE ownersignup SET count = '$count' WHERE mobile_number = '$smobilenumber'";  
+  $sql4="UPDATE usersignup SET count = '$count' WHERE mobilenumber = '$umobilenumber'";  
  $conn->query($sql4);
 //echo '</li>'; // Close the list item
 ?>
@@ -191,10 +191,10 @@ if ($result->num_rows > 0) {
 
         </li>
         <?php
-include_once 'dbconfig.php';
-$shopname = $_COOKIE['username'];
-$smobilenumber = $_COOKIE['mobilenumber'];
-$sql = "SELECT imgid,imgname,images FROM ownersignup WHERE mobile_number = '$smobilenumber'";
+include_once 'config.php';
+$username = $_COOKIE['username'];
+$umobilenumber = $_COOKIE['umobilenumber'];
+$sql = "SELECT imgid,imgname,images FROM usersignup WHERE mobilenumber = '$umobilenumber'";
 $result = $conn->query($sql);
 
 if ($result === false) {
@@ -208,7 +208,7 @@ if ($result->num_rows > 0) {
     $name = $row['imgname'];
     $imageurl = "img/{$image}";
     echo '<li class="nav-item dropdown pe-3">';
-    echo ' <a class="nav-link nav-profile d-flex align-items-center pe-0" href="user_signup&login_page/oprofile.php">';
+    echo ' <a class="nav-link nav-profile d-flex align-items-center pe-0" href="profile.php">';
    // echo '  <img src="' . $imageurl . '" alt="Profile" class="rounded-circle">';?>
     <img src="<?php if(isset($row['images'])) echo $imageurl; else echo 'boy.png';?>" class="rounded-circle">
     <?php echo '<span class="d-none d-md-block dropdown-toggle ps-2"></span>';
@@ -221,7 +221,7 @@ if ($result->num_rows > 0) {
     
 
 // Close the connection
-$conn->close();
+//$conn->close();
 ?>
 
         
@@ -238,14 +238,12 @@ $conn->close();
     </nav><!-- End Icons Navigation -->
 
   </header><!-- End Header -->
-
-  <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
+  <!-- ======= Sidebar ======= -->
+  <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link" href="home.php">
+        <a class="nav-link" href="index.php">
           <i class="bi bi-house"></i>
           <span>Home</span>
         </a>
@@ -257,13 +255,13 @@ $conn->close();
         </a>
              
       <li class="nav-item">
-        <a class="nav-link collapsed" href="sample1.php">
+        <a class="nav-link collapsed" href="useraccounts.php">
           <i class="bi bi-journal-text"></i><span>Accounts</span>
           </a>
      
         
       <li class="nav-item">
-        <a class="nav-link collapsed" href="index1.php">
+        <a class="nav-link collapsed" href="index3.php">
           <i class="bi bi-clock"></i><span>Transaction History</span>
         </a>
       
@@ -336,6 +334,5 @@ $(document).ready(function () {
     $(window).on('scroll', scrollHeader);
 });
 </script>
-
     </body>
 </html>

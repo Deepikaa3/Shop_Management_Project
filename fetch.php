@@ -153,22 +153,20 @@
     <body>
 <?php
 //<!-- Modified Script 2 incorporating card view style -->
-include_once 'dbConfig.php';
+include_once 'config.php';
 $output = '';
-$smobilenumber=$_COOKIE['mobilenumber']; 
+$umobilenumber=$_COOKIE['umobilenumber']; 
 
 if (isset($_POST["query"])) {
     $search = mysqli_real_escape_string($conn, $_POST["query"]);
     $query = "
-    SELECT username, balance, umobilenumber
-    FROM owneraccounts 
-    WHERE (username LIKE '%" . $search . "%' OR umobilenumber LIKE '" . $search . "%')
-        AND smobilenumber = '$smobilenumber'
-    GROUP BY umobilenumber";
-
+        SELECT shopname, balance, smobilenumber FROM owneraccounts 
+        WHERE shopname LIKE '%" . $search . "%'
+        OR smobilenumber LIKE '" . $search . "%' GROUP BY smobilenumber  
+    ";
 } else {
     $query = "
-        SELECT * FROM owneraccounts ORDER BY username
+        SELECT * FROM owneraccounts ORDER BY shopname
     ";
 }
 
@@ -182,18 +180,18 @@ if (mysqli_num_rows($result) > 0) {
     ";
 
     while ($row = mysqli_fetch_array($result)) {
-        $umobilenumber=$row['umobilenumber'];
-        $username = $row["username"];
-        $sql3 = "SELECT * FROM usersignup WHERE mobilenumber ='$umobilenumber'";
+        $smobilenumber=$row['smobilenumber'];
+        $shopname = $row["shopname"];
+        $sql3 = "SELECT * FROM ownersignup WHERE mobile_number ='$smobilenumber'";
 $result3 = $conn->query($sql3);
-$sql2 = "SELECT usersignup.images from usersignup JOIN owneraccounts ON usersignup.mobilenumber = owneraccounts.umobilenumber WHERE owneraccounts.umobilenumber ='$umobilenumber' AND owneraccounts.smobilenumber ='$smobilenumber'";
+$sql2 = "SELECT ownersignup.images from ownersignup JOIN owneraccounts ON ownersignup.mobile_number = owneraccounts.smobilenumber WHERE owneraccounts.smobilenumber ='$smobilenumber' AND owneraccounts.umobilenumber ='$umobilenumber'";
 $result1 = $conn->query($sql2);
 $row1 = $result1->fetch_assoc();
 if($result3->num_rows>0)
  {
   $row3 = $result3->fetch_assoc();
   $id = $row3['imgid'];
-  $img = $row1['images'];
+  $img = isset($row1['images']) ? $row1['images'] : null;
   $name = $row3['imgname'];
   
  }
@@ -201,21 +199,29 @@ if($result3->num_rows>0)
 echo'<div class="result pt-2">';
 echo '<li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">';
 echo '<div class="d-flex align-items-center">';
-?><img src="<?php if(isset($row1['images'])) echo 'user_signup&login_page/img/'.$row1['images']; else echo 'logo.png';?>" class="icon-md me-3">
+?><img src="<?php if(isset($row1['images'])) echo 'img/'.$row1['images']; else echo 'boy.png';?>" class="icon-md me-3">
                      
 <?php //echo '<div class="icon icon-shape icon-md me-3 bg-gradient-dark shadow text-center"></div>';
 echo '<div class="d-flex flex-column">';
-echo "<a href='sample2.php?username=".$row["username"]."&mobilenumber=".$row["umobilenumber"]."'>";
-echo '<h6 class="mb-1 text-dark text-lg font-weight-bold">' . $row["username"] . '</h6>';
+echo "<a href='useraccounts2.php?shopname=".$row["shopname"]."&mobilenumber=".$row["smobilenumber"]."'>";
+echo '<h6 class="mb-1 text-dark text-lg font-weight-bold">' . $row["shopname"] . '</h6>';
+$umobilenumber=$_COOKIE['umobilenumber'];
 //echo '<span class="text-dark text-sm">' . $row["umobilenumber"] . ' <span class="font-weight-bold"></span></span>';
-$sqlDebit = "SELECT SUM(totalamount) AS tamount , SUM(credit) As tcredit
-FROM owneraccounts 
-WHERE smobilenumber ='$smobilenumber' AND umobilenumber = '$umobilenumber' ORDER BY id DESC";
-$resultDebit = $conn->query($sqlDebit);
-$rowDebit = $resultDebit->fetch_assoc();
-$tamount = $rowDebit['tamount'];
-$tcredit = $rowDebit['tcredit'];
-$totalbalance= $tamount-$tcredit;
+$query ="SELECT COUNT(DISTINCT smobilenumber) AS totalshops, SUM(totalamount) AS tamount, SUM(credit) AS tcredit FROM owneraccounts  WHERE umobilenumber='$umobilenumber'  GROUP BY smobilenumber";
+$result = $conn->query($query);
+if ($result->num_rows > 0) {
+  $row = $result->fetch_assoc();
+  $totalshops = $row["totalshops"];
+  $tamount = $row["tamount"];
+  $tcredit = $row["tcredit"];
+  $totalbalance=$tamount-$tcredit;
+} else {
+  $totalshops = 0;
+  $totalbalance = 0;
+  $tcredit = 0;
+  $tamount=0;
+}
+
 // Rest of your code remains unchanged  
 echo '<span class="text-dark text-sm font-weight-bold">&nbsp;Balance:'; ?>
 <?php echo '₹' . number_format($totalbalance, 2); ?>

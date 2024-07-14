@@ -1,43 +1,27 @@
 <?php
 session_start();
-include_once 'dbConfig.php';
-
-$username = $_GET["username"];
+$uusername = $_GET["username"];
 $umobilenumber = $_GET["mobilenumber"];
+include_once 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $shopname = $_COOKIE['username'];
-    $smobilenumber = $_COOKIE['mobilenumber'];
+    $username = $_COOKIE['username'];
+    $umobilenumber = $_COOKIE['umobilenumber'];
     $selectedOption = isset($_POST['rdateOption']) ? $_POST['rdateOption'] : '';
-
-    // Calculate the new date based on the selected option
-    switch ($selectedOption) {
-        case 'weekly':
-            $interval = '+7 days';
-            break;
-        case 'monthly':
-            $interval = '+1 month';
-            break;
-        // Add more cases as needed
-        default:
-            $interval = '+0 days'; // No change
-            break;
-    }
-
-    // Calculate the new date based on the interval
-    $newDate = date('Y-m-d', strtotime($interval));
-
-    // Prepare SQL statement to update 'rdate'
+    $smobilenumber = $_GET['smobilenumber'];
+    $shopname = $_GET['shopname'];
+    // Prepare SQL statement to insert data into the table
     $sql = "UPDATE owneraccounts 
-            SET rdate = '$newDate'
-            WHERE smobilenumber = '$smobilenumber' AND umobilenumber = '$umobilenumber' ";
-            
-    if ($conn->query($sql) === TRUE) {
-        header("Location: sample2.php?username=$username&mobilenumber=$umobilenumber");
-        exit();
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
+        SET remainderdate = '$selectedOption'
+        WHERE umobilenumber = '$umobilenumber' AND smobilenumber = '$smobilenumber' ";
+
+if ($conn->query($sql) === TRUE) {
+     header("Location: useraccounts2.php?shopname=$shopname&smobilenumber=$smobilenumber");
+    exit();
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
 }
 
 $conn->close();

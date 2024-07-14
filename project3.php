@@ -74,7 +74,11 @@
         a {
           text-decoration: none;
         }
-       
+        
+        img {
+          max-width: 100%;
+          height: auto;
+        }
         
       
         .section {
@@ -271,20 +275,20 @@
         <title>Responsive bottom navigation</title>
 
         <!--=============== HEADER ===============-->
-        <footer>
+        
               
 
                 <div class="nav__menu" id="nav-menu">
                     <ul class="nav__list">
                         <li class="nav__item">
-                            <a href="home.php" class="nav__link">
+                            <a href="index.php" class="nav__link">
                                 <i class='bx bx-home-alt nav__icon'></i>
                                 <span class="nav__name">Home</span>
                             </a>
                         </li>
                         
                         <li class="nav__item">
-                            <a href="sample1.php" class="nav__link">
+                            <a href="useraccounts.php" class="nav__link">
                                 <i class='bx bx-user nav__icon'></i>
                                 <span class="nav__name">Accounts</span>
                             </a>
@@ -298,7 +302,7 @@
                         </li>
 
                         <li class="nav__item">
-                            <a href="user_signup&login_page/index3.php" class="nav__link">
+                            <a href="index1.php" class="nav__link">
                                 <i class=''>
                                
                                 <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21q-3.45 0-6.012-2.287T3.05 13H5.1q.35 2.6 2.313 4.3T12 19q2.925 0 4.963-2.037T19 12q0-2.925-2.037-4.962T12 5q-1.725 0-3.225.8T6.25 8H9v2H3V4h2v2.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924q1.212 1.213 1.925 2.85T21 12q0 1.875-.712 3.513t-1.925 2.85q-1.213 1.212-2.85 1.925T12 21m2.8-4.8L11 12.4V7h2v4.6l3.2 3.2z"></path></svg></i>
@@ -312,7 +316,7 @@
 
                 <img src="assets/img/perfil.png" alt="" class="nav__img">
         
-</footer>
+        </header>
         
 
         <main>

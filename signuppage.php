@@ -13,9 +13,9 @@
     <title>Register</title>
 </head>
 <body onload="generate()">
-    <form action="owner_signup.php" id="form" method="post">
+    <form action="user_signup.php" id="form" method="post">
     <div class="container">
-        <div class="column">
+    <div class="column">
     <div class="d-flex align-items-center text-sm">
    
     <img src="logo1.png" style="width:70px; height:40px; margin-left:27px;">
@@ -23,24 +23,24 @@
 </div> 
     </div>
             <div class="input-group">
-                <label for="username">Shop Name</label>
-                <input autocomplete = "off" type="text" id="username" name="username" onchange="return validateInputs();"placeholder="Enter Shop Name" required>
+                <label for="username">User Name</label>
+                <input type="text" autocomplete="off" id="username" name="username" oninput="return validateInputs();"placeholder="Enter User Name" required>
                 <div class="error" id="error"></div>
             </div>
             <div class="input-group">
                 <label for="mobilenumber">Mobile Number</label>
-                <input autocomplete = "off" type="text" onchange="return validateInputs();"maxlength="10" pattern="[6-9]{1}[0-9]{9}" id="mobilenumber" name="mobilenumber" placeholder="Enter Mobile Number" required>
+                <input type="text"  autocomplete="off"onchange="return validateInputs();"maxlength="10" pattern="[6-9]{1}[0-9]{9}" id="mobilenumber" name="mobilenumber" placeholder="Enter Mobile Number" required>
    <div class="error" id="merror"></div>
                
             </div>
             <div id="user-input" class="inline">
-                <input type="text" autocomplete = "off"
+                <input type="text" autocomplete="off"
                     id="submit" name="submit"
                     placeholder="Captcha code" oninput="return validateInputs();"/>
             </div>
         
             <div class="inline" onclick="generate()">
-                <i class="fas fa-sync" style="font-size:20px;"></i>
+                <i class="fas fa-sync"></i>
             </div>
         
             <div id="image"
